@@ -30,46 +30,29 @@ namespace ArchiveVaultFunctions.Services
             _cloudBlobContainer.CreateIfNotExistsAsync().Wait();
         }
 
-        public async Task<Guid> AddFileAsync(string fileName, string type, Stream fileData)
+        public async Task<Guid> AddFileAsync(string fileName, string originalFilePath, Stream fileData)
         {
-            return await this.AddFileAsync(Guid.NewGuid(), fileName, type, fileData);
+            return await this.AddFileAsync(Guid.NewGuid(), fileName, originalFilePath, fileData);
         }
 
-        public async Task<Guid> AddFileAsync(Guid fileGuid, string fileName, string type, Stream fileData)
+        public async Task<Guid> AddFileAsync(Guid fileGuid, string fileName, string originalFilePath, Stream fileData)
         {
             var blob = _cloudBlobContainer.GetBlockBlobReference(fileGuid.ToString());
-
-            string fileExt = null;
-            if (fileName != null)
-            {
-                fileExt = Path.GetExtension(fileName);
-
-                if (fileExt.StartsWith("."))
-                {
-                    fileExt = fileExt.Remove(0, 1); // remove the point (.)
-                }
-            }
 
             var exists = await blob.ExistsAsync();
 
             if (exists == false)
             {
-                if (!string.IsNullOrWhiteSpace(fileExt))
-                {
-                    blob.Metadata.Add("fileExt", fileExt);
-                }
 
                 if (!string.IsNullOrWhiteSpace(fileName))
                 {
                     blob.Metadata.Add("fileName", fileName);
                 }
 
-                if (!string.IsNullOrWhiteSpace(type))
+                if (!string.IsNullOrWhiteSpace(originalFilePath))
                 {
-                    blob.Metadata.Add("type", type);
+                    blob.Metadata.Add("originalFilePath", originalFilePath);
                 }
-
-                //blob.Metadata.Add("sessionGuid", _sessionGuid.ToString());
 
                 await blob.UploadFromStreamAsync(fileData);
             }

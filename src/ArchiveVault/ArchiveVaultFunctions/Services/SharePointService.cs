@@ -40,6 +40,9 @@ namespace ArchiveVaultFunctions.Services
 
                 await clientContext.ExecuteQueryRetryAsync();
 
+                // Required to read the length so the stream is read and completed
+                var length = fileStream.Value.Length;
+
                 return fileStream.Value;
             }
         }

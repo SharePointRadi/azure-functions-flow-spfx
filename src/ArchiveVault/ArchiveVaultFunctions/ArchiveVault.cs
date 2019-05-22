@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -51,12 +52,14 @@ namespace ArchiveVaultFunctions
                 // DEBUG
                 spFilePath = "https://techmikael.sharepoint.com/teams/CollabSummit2019/Shared%20Documents/Document.docx";
                 siteCollection = "https://techmikael.sharepoint.com/teams/CollabSummit2019";
-                
-                // Get file from SP
-                var spFile = await sharePointService.GetFile(spFilePath, siteCollection); // TODO
 
+                var fileName = Path.GetFileName(spFilePath);
+
+                // Get file from SP
+                var spFile = await sharePointService.GetFile(spFilePath, siteCollection);
+                
                 // Save file to blob storage
-                var createdFileGuid = await blobStorageService.AddFileAsync("", "", null); // TODO
+                var createdFileGuid = await blobStorageService.AddFileAsync(fileName, spFilePath, spFile);
 
                 return req.CreateResponse($"File created: {createdFileGuid}");
             }
