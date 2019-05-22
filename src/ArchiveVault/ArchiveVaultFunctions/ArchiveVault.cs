@@ -49,7 +49,7 @@ namespace ArchiveVaultFunctions
             }
             catch (Exception ex)
             {
-                return req.CreateErrorResponse(ex);
+                return req.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
     }
