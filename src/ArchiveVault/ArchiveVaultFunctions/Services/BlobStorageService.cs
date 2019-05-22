@@ -16,16 +16,9 @@ namespace ArchiveVaultFunctions.Services
 
         public BlobStorageService()
         {
-
-        }
-
-        public BlobStorageService(
-            string storageAccountName,
-            string storageAccountKey,
-            string storageContainerName)
-        {
-            StorageCredentials storageCredentials = new StorageCredentials(storageAccountName, storageAccountKey);
-            CloudStorageAccount storageAccount = new CloudStorageAccount(storageCredentials, true);
+            var storageConnectionString = System.Environment.GetEnvironmentVariable("AzureWebJobsStorage", EnvironmentVariableTarget.Process);
+            var storageContainerName = "archive-vault";
+            var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
 
             // Get a blob client object
             _cloudBlobClient = storageAccount.CreateCloudBlobClient();

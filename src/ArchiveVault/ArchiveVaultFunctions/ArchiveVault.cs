@@ -21,26 +21,39 @@ namespace ArchiveVaultFunctions
         {
             log.Info("C# HTTP trigger function processed a request.");
 
-            // parse query parameter
-            string name = req.GetQueryNameValuePairs()
+            // parse SpFilePath query parameter
+            string spFilePath = req.GetQueryNameValuePairs()
                 .FirstOrDefault(q => string.Compare(q.Key, "SpFilePath", true) == 0)
                 .Value;
 
-            if (name == null)
+            string siteCollection = req.GetQueryNameValuePairs()
+                .FirstOrDefault(q => string.Compare(q.Key, "siteCollection", true) == 0)
+                .Value;
+
+            if (spFilePath == null)
             {
                 // Get request body
                 dynamic data = await req.Content.ReadAsAsync<object>();
-                name = data?.name;
+                spFilePath = data?.spFilePath;
+            }
+
+            if (siteCollection == null)
+            {
+                // Get request body
+                dynamic data = await req.Content.ReadAsAsync<object>(); // TODO: fix duplicate code
+                siteCollection = data?.siteCollection;
             }
 
             try
             {
                 log.Info("ArchiveDocument called via HTTP");
 
-                string spFilePath = "https://techmikael.sharepoint.com/teams/CollabSummit2019/Shared%20Documents/Document.docx";
-
+                // DEBUG
+                spFilePath = "https://techmikael.sharepoint.com/teams/CollabSummit2019/Shared%20Documents/Document.docx";
+                siteCollection = "https://techmikael.sharepoint.com/teams/CollabSummit2019";
+                
                 // Get file from SP
-                var spFile = await sharePointService.GetFile(spFilePath, "https://techmikael.sharepoint.com/teams/CollabSummit2019"); // TODO
+                var spFile = await sharePointService.GetFile(spFilePath, siteCollection); // TODO
 
                 // Save file to blob storage
                 var createdFileGuid = await blobStorageService.AddFileAsync("", "", null); // TODO
