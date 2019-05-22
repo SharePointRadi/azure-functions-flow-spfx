@@ -6,24 +6,27 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArchiveVault.Services
+namespace ArchiveVaultFunctions.Services
 {
     public class SharePointService
     {
+        private string Username;
+        private string Password;
+
         public SharePointService()
         {
-
+            Username = System.Environment.GetEnvironmentVariable("SharePointUsername", EnvironmentVariableTarget.Process);
+            Password = System.Environment.GetEnvironmentVariable("SharePointPassword", EnvironmentVariableTarget.Process);
         }
 
         public async Task<Stream> GetFile(
             string fullPath,
-            string sharePointSiteCollectionUrl,
-            string clientId,
-            string clientSecret)
+            string sharePointSiteCollectionUrl)
         {
             var pnpAuthenticationManager = new AuthenticationManager();
+            
             using (ClientContext clientContext = pnpAuthenticationManager
-                    .GetAppOnlyAuthenticatedContext(sharePointSiteCollectionUrl, clientId, clientSecret))
+                    .GetSharePointOnlineAuthenticatedContextTenant(sharePointSiteCollectionUrl, Username, Password))
             {
                 var web = clientContext.Web;
                 var file = web.GetFileByUrl(fullPath);

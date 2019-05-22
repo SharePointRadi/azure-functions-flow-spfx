@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArchiveVault.Services
+namespace ArchiveVaultFunctions.Services
 {
     public class BlobStorageService
     {
