@@ -1,0 +1,12 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.8.2",
+    "libraryName": "archive-vault-web-part",
+    "libraryId": "c75a5ccb-b79d-4ba2-b998-0fb454acc796",
+    "environment": "spo",
+    "packageManager": "npm",
+    "isCreatingSolution": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

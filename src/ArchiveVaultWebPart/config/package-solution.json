@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "archive-vault-web-part-client-side-solution",
+    "id": "c75a5ccb-b79d-4ba2-b998-0fb454acc796",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false
+  },
+  "paths": {
+    "zippedPackage": "solution/archive-vault-web-part.sppkg"
+  }
+}

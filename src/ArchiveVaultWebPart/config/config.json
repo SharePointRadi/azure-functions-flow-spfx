@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "archive-vault-web-part-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/archiveVaultWebPart/ArchiveVaultWebPartWebPart.js",
+          "manifest": "./src/webparts/archiveVaultWebPart/ArchiveVaultWebPartWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ArchiveVaultWebPartWebPartStrings": "lib/webparts/archiveVaultWebPart/loc/{locale}.js"
+  }
+}
