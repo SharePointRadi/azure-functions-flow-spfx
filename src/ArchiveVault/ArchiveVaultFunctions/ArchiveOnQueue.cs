@@ -19,7 +19,7 @@ namespace ArchiveVaultFunctions
         //}
 
         [FunctionName("ArchiveOnQueue")]
-        public static void Run([QueueTrigger("archivevault-queue", Connection = "AzureWebJobsStorage")]string myQueueItem, TraceWriter log)
+        public static async void Run([QueueTrigger("archivevault-queue", Connection = "AzureWebJobsStorage")]string myQueueItem, TraceWriter log)
         {
             log.Info($"ArchiveOnQueue trigger function processed: {myQueueItem}");
 
@@ -30,7 +30,7 @@ namespace ArchiveVaultFunctions
                 var confidentialityLevel = data?.confidentialityLevel?.Value;
                 var retentionPeriod = data?.retentionPeriod?.Value;
 
-                var createdFileGuid = Archive.ArchiveDocument(
+                var createdFileGuid = await Archive.ArchiveDocument(
                     log,
                     blobStorageService,
                     sharePointService,

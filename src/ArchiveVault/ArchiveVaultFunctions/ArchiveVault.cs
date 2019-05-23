@@ -35,7 +35,7 @@ namespace ArchiveVaultFunctions
                 var confidentialityLevel = data?.confidentialityLevel?.Value;
                 var retentionPeriod = data?.retentionPeriod?.Value;
 
-                var createdFileGuid = Archive.ArchiveDocument(
+                var createdFileGuid = await Archive.ArchiveDocument(
                     log,
                     blobStorageService,
                     sharePointService,
