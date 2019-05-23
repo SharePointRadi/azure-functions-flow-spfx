@@ -30,12 +30,12 @@ namespace ArchiveVaultFunctions.Services
             _cloudBlobContainer.CreateIfNotExistsAsync().Wait();
         }
 
-        public async Task<Guid> AddFileAsync(string fileName, string originalFilePath, Stream fileData)
+        public async Task<Guid> AddFileAsync(string fileName, string originalFilePath, Stream fileData, string confidentialityLevel, string retentionPeriod)
         {
-            return await this.AddFileAsync(Guid.NewGuid(), fileName, originalFilePath, fileData);
+            return await this.AddFileAsync(Guid.NewGuid(), fileName, originalFilePath, fileData, confidentialityLevel, retentionPeriod);
         }
 
-        public async Task<Guid> AddFileAsync(Guid fileGuid, string fileName, string originalFilePath, Stream fileData)
+        public async Task<Guid> AddFileAsync(Guid fileGuid, string fileName, string originalFilePath, Stream fileData, string confidentialityLevel, string retentionPeriod)
         {
             var blob = _cloudBlobContainer.GetBlockBlobReference(fileGuid.ToString());
 
@@ -43,7 +43,6 @@ namespace ArchiveVaultFunctions.Services
 
             if (exists == false)
             {
-
                 if (!string.IsNullOrWhiteSpace(fileName))
                 {
                     blob.Metadata.Add("fileName", fileName);
@@ -52,6 +51,16 @@ namespace ArchiveVaultFunctions.Services
                 if (!string.IsNullOrWhiteSpace(originalFilePath))
                 {
                     blob.Metadata.Add("originalFilePath", originalFilePath);
+                }
+
+                if (!string.IsNullOrWhiteSpace(confidentialityLevel))
+                {
+                    blob.Metadata.Add("confidentialityLevel", confidentialityLevel);
+                }
+
+                if (!string.IsNullOrWhiteSpace(retentionPeriod))
+                {
+                    blob.Metadata.Add("retentionPeriod", retentionPeriod);
                 }
 
                 await blob.UploadFromStreamAsync(fileData);
@@ -64,11 +73,11 @@ namespace ArchiveVaultFunctions.Services
             return fileGuid;
         }
 
-        public async Task<Guid> AddFileAsync(Guid fileGuid, string fileName, string type, byte[] fileData)
+        public async Task<Guid> AddFileAsync(Guid fileGuid, string fileName, string type, byte[] fileData, string confidentialityLevel, string retentionPeriod)
         {
             using (var memStr = new MemoryStream(fileData))
             {
-                return await this.AddFileAsync(fileGuid, fileName, type, memStr);
+                return await this.AddFileAsync(fileGuid, fileName, type, memStr, confidentialityLevel, retentionPeriod);
             }
         }
 

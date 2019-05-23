@@ -26,24 +26,26 @@ namespace ArchiveVaultFunctions.Services
             string fullPath,
             string sharePointSiteCollectionUrl)
         {
+            // Process URL's - we get the server relative URL, works both for / and /teams/sitecoll URL's
+            Uri fileUri = new Uri(fullPath);
+            string serverserverUrl = fileUri.AbsoluteUri.Replace(fileUri.AbsolutePath, string.Empty);
+            string serverRelativeUrl = fileUri.AbsolutePath;
+
+            // Get a client context
             var pnpAuthenticationManager = new AuthenticationManager();
-
             using (ClientContext clientContext = pnpAuthenticationManager
-                    .GetSharePointOnlineAuthenticatedContextTenant(sharePointSiteCollectionUrl, Username, Password))
+                    .GetSharePointOnlineAuthenticatedContextTenant(serverserverUrl, Username, Password))
             {
-                var web = clientContext.Web;
-                var file = web.GetFileByUrl(fullPath);
-
-                var fileStream = file.OpenBinaryStream();
-
-                clientContext.Load(file);
+                // we use OpenBinaryDirect as it can get a file from anywhere across Site Collections
+                FileInformation fileInformation = Microsoft.SharePoint.Client.File.OpenBinaryDirect(clientContext, serverRelativeUrl);
 
                 await clientContext.ExecuteQueryRetryAsync();
 
-                // Required to read the length so the stream is read and completed
-                var length = fileStream.Value.Length;
-
-                return fileStream.Value;
+                // return as memory stream
+                var memoryStream = new MemoryStream();
+                fileInformation.Stream.CopyTo(memoryStream);
+                memoryStream.Position = 0;
+                return memoryStream;
             }
         }
     }
