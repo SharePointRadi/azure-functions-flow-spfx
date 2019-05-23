@@ -174,5 +174,49 @@ namespace ArchiveVaultFunctions.Services
             }
         }
 
+        public async Task<List<BlobResult>> GetDocuments()
+        {
+            var blobResults = new List<BlobResult>();
+
+            //var blob = _cloudBlobContainer.Get
+            BlobContinuationToken blobContinuationToken = null;
+            do
+            {
+                var results = await _cloudBlobContainer.ListBlobsSegmentedAsync(null, blobContinuationToken);
+
+                // Get the value of the continuation token returned by the listing call.
+                blobContinuationToken = results.ContinuationToken;
+                foreach (IListBlobItem item in results.Results)
+                {
+                    CloudBlockBlob blob = (CloudBlockBlob)item;
+
+                    blob.FetchAttributes();
+
+                    blobResults.Add(new BlobResult()
+                    {
+                        FileName = GetMetadataValue(blob, "fileName"),
+                        SpFilePath = GetMetadataValue(blob, "originalFilePath"),
+                        ConfidentialityLevel = GetMetadataValue(blob, "confidentialityLevel"),
+                        RetentionPeriod = GetMetadataValue(blob, "retentionPeriod")
+                    });
+                }
+
+            } while (blobContinuationToken != null); // Loop while the continuation token is not null.
+
+            return blobResults;
+        }
+
+        private string GetMetadataValue(CloudBlockBlob blob, string key)
+        {
+            string returnValue;
+            blob.Metadata.TryGetValue(key, out returnValue);
+
+            if (returnValue == null)
+            {
+                return string.Empty;
+            }
+
+            return returnValue;
+        }
     }
 }
