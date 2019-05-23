@@ -22,9 +22,7 @@ namespace ArchiveVaultFunctions.Services
             if (string.IsNullOrWhiteSpace(Password)) throw new ArgumentException("You must set SharePointPassword in the application settings.");
         }
 
-        public async Task<Stream> GetFile(
-            string fullPath,
-            string sharePointSiteCollectionUrl)
+        public async Task<Stream> GetFile(string fullPath)
         {
             // Process URL's - we get the server relative URL, works both for / and /teams/sitecoll URL's
             Uri fileUri = new Uri(fullPath);

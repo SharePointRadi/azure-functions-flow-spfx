@@ -1,15 +1,12 @@
+using System;
+using ArchiveVaultFunctions.Services;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Host;
+using Newtonsoft.Json;
+
 namespace ArchiveVaultFunctions
 {
-    using System;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using ArchiveVaultFunctions.Services;
-    using Microsoft.Azure.WebJobs;
-    using Microsoft.Azure.WebJobs.Extensions.Http;
-    using Microsoft.Azure.WebJobs.Host;
-
-    public static class ArchiveVault
+    public static class ArchiveOnQueue
     {
         private static BlobStorageService blobStorageService = new BlobStorageService();
         private static SharePointService sharePointService = new SharePointService();
@@ -21,16 +18,14 @@ namespace ArchiveVaultFunctions
         //    "retentionPeriod":"3"
         //}
 
-        [FunctionName("ArchiveVault")]
-        public static async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+        [FunctionName("ArchiveOnQueue")]
+        public static void Run([QueueTrigger("archivevault-queue", Connection = "AzureWebJobsStorage")]string myQueueItem, TraceWriter log)
         {
-            log.Info("ArchiveVault HTTP trigger function incoming request.");
+            log.Info($"ArchiveOnQueue trigger function processed: {myQueueItem}");
 
             try
-            {           
-                // Get request body
-                dynamic data = await req.Content.ReadAsAsync<object>();
+            {
+                dynamic data = JsonConvert.DeserializeObject(myQueueItem);
                 var spFilePath = data?.spFilePath?.Value;
                 var confidentialityLevel = data?.confidentialityLevel?.Value;
                 var retentionPeriod = data?.retentionPeriod?.Value;
@@ -43,12 +38,11 @@ namespace ArchiveVaultFunctions
                     confidentialityLevel,
                     retentionPeriod);
 
-                return req.CreateResponse($"File created: {createdFileGuid}");
+                log.Info($"File created: {createdFileGuid}");
             }
             catch (Exception ex)
             {
                 log.Error("Error:", ex);
-                return req.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
     }
