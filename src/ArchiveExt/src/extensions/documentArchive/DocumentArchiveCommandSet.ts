@@ -46,7 +46,8 @@ export default class DocumentArchiveCommandSet extends BaseListViewCommandSet<ID
         switch (event.itemId) {
             case 'COMMAND_1':
                 const itemId = event.selectedRows[0].getValueByName("ID");
-                const pane = new InputPane({ httpClient: this.context.httpClient, itemId: itemId });
+                const spFilePath = "https://" + window.location.hostname + event.selectedRows[0].getValueByName("FileRef");
+                const pane = new InputPane({ httpClient: this.context.httpClient, itemId: itemId, spFilePath: spFilePath });
                 pane.show();
                 break;
             default:
