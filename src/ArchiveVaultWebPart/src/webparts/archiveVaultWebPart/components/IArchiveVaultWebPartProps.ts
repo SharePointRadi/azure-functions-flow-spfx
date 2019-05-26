@@ -1,5 +1,6 @@
-import { HttpClient, HttpClientResponse } from '@microsoft/sp-http';
+import { HttpClient, AadHttpClientFactory, HttpClientResponse } from '@microsoft/sp-http';
 export interface IArchiveVaultWebPartProps {
   description: string;
   httpClient: HttpClient;
+  aadHttpClientFactory: AadHttpClientFactory;
 }

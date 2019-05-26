@@ -10,7 +10,7 @@ import {
 import * as strings from 'ArchiveVaultWebPartWebPartStrings';
 import ArchiveVaultWebPart from './components/ArchiveVaultWebPart';
 import { IArchiveVaultWebPartProps } from './components/IArchiveVaultWebPartProps';
-import { HttpClient, HttpClientResponse } from '@microsoft/sp-http';
+import { HttpClient, AadHttpClient, HttpClientResponse } from '@microsoft/sp-http';
 
 
 export interface IArchiveVaultWebPartWebPartProps {
@@ -24,7 +24,8 @@ export default class ArchiveVaultWebPartWebPart extends BaseClientSideWebPart<IA
       ArchiveVaultWebPart,
       {
         description: this.properties.description,
-        httpClient: this.context.httpClient
+        httpClient: this.context.httpClient,
+        aadHttpClientFactory: this.context.aadHttpClientFactory
       }
     );
 

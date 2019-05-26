@@ -2,12 +2,9 @@ import * as React from "react";
 import styles from "./ArchiveVaultWebPart.module.scss";
 import { IArchiveVaultWebPartProps } from "./IArchiveVaultWebPartProps";
 import { escape } from "@microsoft/sp-lodash-subset";
-import { HttpClient, HttpClientResponse } from "@microsoft/sp-http";
+import { HttpClient, AadHttpClient, HttpClientResponse } from "@microsoft/sp-http";
 
-export default class ArchiveVaultWebPart extends React.Component<
-  IArchiveVaultWebPartProps,
-  any
-> {
+export default class ArchiveVaultWebPart extends React.Component<IArchiveVaultWebPartProps,any> {
   constructor(props: any) {
     super(props);
 
@@ -74,5 +71,19 @@ export default class ArchiveVaultWebPart extends React.Component<
           Promise.resolve(null);
         }
       });
+  }
+
+  private callWithAadHttpClient(): void {
+    this.props.aadHttpClientFactory.getClient('https://archive-vault.azurewebsites.net')
+      .then((client: AadHttpClient): void => {
+      client
+        .get('https://archive-vault.azurewebsites.net/api/GetArchiveVaultDocuments', AadHttpClient.configurations.v1)
+        .then((response: HttpClientResponse) => {
+          return response.json();
+        })
+        .then((data): void => {
+          // process data
+        });
+    });
   }
 }
