@@ -18,7 +18,7 @@ namespace ArchiveVaultFunctions
 
         // Sample payload:
         //{
-        //    "spFilePath":"https://techmikael.sharepoint.com/teams/CollabSummit2019/Shared%20Documents/Document.docx",
+        //    "spFilePath":"https://{tenant}.sharepoint.com/teams/{siteCollection}/Shared%20Documents/Document.docx",
         //    "confidentialityLevel":"Secure",
         //    "retentionPeriod":"3"
         //}
