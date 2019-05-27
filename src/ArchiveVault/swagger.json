@@ -1,0 +1,66 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"title": "ArchiveVaultFunctions",
+		"version": "1.0.0"
+	},
+	"host": "archive-vault.azurewebsites.net",
+	"basePath": "/",
+	"schemes": ["https"],
+	"definitions": {
+		"ArchivePayload": {
+			"type": "object",
+			"properties": {
+				"spFilePath": {
+					"description": "SharePoint file URL",
+					"type": "string"
+				},
+				"confidentialityLevel": {
+					"description": "Confidentiality level",
+					"type": "string"
+				},
+				"retentionPeriod": {
+					"description": "Retention Period",
+					"type": "string"
+				}
+			},
+			"required": ["spFilePath", "confidentialityLevel", "retentionPeriod"]
+		}
+	},
+	"paths": {
+		"/api/ArchiveVault": {
+			"post": {
+				"operationId": "ArchivevaultPost",
+				"produces": ["application/json"],
+				"consumes": ["application/json"],
+				"parameters": [{
+						"name": "payload",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/ArchivePayload"
+						}
+					}
+				],
+				"summary": "Run ArchiveVault",
+				"description": "This function will run ArchiveVault",
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				},
+				"security": [{
+						"apikeyQuery": []
+					}
+				]
+			}
+		}
+	},
+	"securityDefinitions": {
+		"apikeyQuery": {
+			"type": "apiKey",
+			"name": "code",
+			"in": "query"
+		}
+	}
+}
