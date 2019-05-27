@@ -36,6 +36,7 @@ export default class ArchiveVaultWebPart extends React.Component<IArchiveVaultWe
           <div className={styles.row}>
             <div className={styles.column}>
               <span className={styles.title}>Archive Vault</span>
+              <div>&nbsp;</div>
               <table className={styles.archiveTable}>
                 <thead className={styles.tableStylethead}>
                   <tr>

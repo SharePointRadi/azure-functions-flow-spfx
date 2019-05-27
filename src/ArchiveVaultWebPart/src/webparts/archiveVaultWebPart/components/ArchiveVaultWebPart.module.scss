@@ -3,6 +3,11 @@
 
 
 .archiveVaultWebPart {
+  
+  .column {
+    width:100% !important;
+  }
+  
   .container {
     max-width: 700px;
     margin: 0px auto;
@@ -13,27 +18,34 @@
   {
     font-weight: bold;
     padding: 5px;
-  
+  }
+
+  .tableStylethead tr {
+    border-bottom:1px solid #8a8886;
   }
 
   .tableStylethead td
   {
-    background-color: #DDEEEE;
-    padding: 5px;
+    // background-color: #DDEEEE;
+    padding: 8px;
   }
   
-  .archiveTable{
-    border: solid 1px #DDEEEE;
+  .archiveTable {
+    // border: solid 1px #DDEEEE;
     border-collapse: collapse;
     border-spacing: 0;
     margin:0px auto;
     width:100%;
   }
+ 
+
+  .archiveTable tbody tr {
+    border-bottom:1px solid #c8c6c4;
+  }
 
   .archiveTable tbody td{
-    padding: 5px;
-    border: solid 1px #DDEEEE;
-    padding: 10px;
+    // border: solid 1px #DDEEEE;
+    padding: 8px;
     text-align: left;
     text-shadow: 1px 1px 1px #fff;
   }

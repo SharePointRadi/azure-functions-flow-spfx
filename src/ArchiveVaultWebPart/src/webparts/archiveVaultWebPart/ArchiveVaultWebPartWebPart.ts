@@ -20,7 +20,7 @@ export interface IArchiveVaultWebPartWebPartProps {
 export default class ArchiveVaultWebPartWebPart extends BaseClientSideWebPart<IArchiveVaultWebPartWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<IArchiveVaultWebPartProps > = React.createElement(
+    const element: React.ReactElement<IArchiveVaultWebPartProps> = React.createElement(
       ArchiveVaultWebPart,
       {
         description: this.properties.description,
