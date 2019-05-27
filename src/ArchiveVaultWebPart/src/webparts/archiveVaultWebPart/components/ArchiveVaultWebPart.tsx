@@ -2,9 +2,14 @@ import * as React from "react";
 import styles from "./ArchiveVaultWebPart.module.scss";
 import { IArchiveVaultWebPartProps } from "./IArchiveVaultWebPartProps";
 import { escape } from "@microsoft/sp-lodash-subset";
-import { HttpClient, AadHttpClient, HttpClientResponse } from "@microsoft/sp-http";
+import {
+  HttpClient,
+  AadHttpClient,
+  HttpClientResponse
+} from "@microsoft/sp-http";
+import { Environment, EnvironmentType } from "@microsoft/sp-core-library";
 
-export default class ArchiveVaultWebPart extends React.Component<IArchiveVaultWebPartProps,any> {
+export default class ArchiveVaultWebPart extends React.Component<IArchiveVaultWebPartProps, any> {
   constructor(props: any) {
     super(props);
 
@@ -55,6 +60,22 @@ export default class ArchiveVaultWebPart extends React.Component<IArchiveVaultWe
   }
 
   public componentDidMount(): void {
+    if (Environment.type == EnvironmentType.ClassicSharePoint) {
+      this.callWithHttpClient();
+      //Classic SharePoint page
+    } else if (Environment.type === EnvironmentType.Local) {
+      this.callWithHttpClient();
+      //Workbenck page
+    } else if (Environment.type === EnvironmentType.SharePoint) {
+      this.callWithHttpClient();
+      //Modern SharePoint page
+    } else if (Environment.type === EnvironmentType.Test) {
+      this.callWithHttpClient();
+      //Running on Unit test enveironment
+    }
+  }
+
+  private callWithHttpClient(): void {
     var functionUrl =
       "https://archive-vault.azurewebsites.net/api/GetArchiveVaultDocuments?code=LDhSQkGDY9OBim1KYqDaZ9SQrs6J9eIYjDiWna/ISqgFBFJT8sz1Qg==";
 
@@ -75,16 +96,24 @@ export default class ArchiveVaultWebPart extends React.Component<IArchiveVaultWe
   }
 
   private callWithAadHttpClient(): void {
-    this.props.aadHttpClientFactory.getClient('https://archive-vault.azurewebsites.net')
-      .then((client: AadHttpClient): void => {
-      client
-        .get('https://archive-vault.azurewebsites.net/api/GetArchiveVaultDocuments', AadHttpClient.configurations.v1)
-        .then((response: HttpClientResponse) => {
-          return response.json();
-        })
-        .then((data): void => {
-          // process data
-        });
-    });
+    this.props.aadHttpClientFactory
+      .getClient("https://archive-vault.azurewebsites.net")
+      .then(
+        (client: AadHttpClient): void => {
+          client
+            .get(
+              "https://archive-vault.azurewebsites.net/api/GetArchiveVaultDocuments",
+              AadHttpClient.configurations.v1
+            )
+            .then((response: HttpClientResponse) => {
+              return response.json();
+            })
+            .then(
+              (data): void => {
+                // process data
+              }
+            );
+        }
+      );
   }
 }
