@@ -20,9 +20,9 @@ export default class ArchiveVaultWebPart extends React.Component<IArchiveVaultWe
 
   protected bindTable(data) {
     var allElements = [];
-    data.map(document => {
+    data.map((document, index) => {
       allElements.push(
-        <tr>
+        <tr key={index}>
           <td>
             <a href={document.SpFilePath}>{document.FileName}</a>
           </td>
