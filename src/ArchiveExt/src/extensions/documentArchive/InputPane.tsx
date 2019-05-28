@@ -112,6 +112,7 @@ class InputPaneContent extends React.Component<IInputPaneContentProps, IInputPan
 
     private async archiveAzure() {
         this.setState({ hidePanel: true });
+        // TODO: Call using aadClient in a secure manner
         const azureUrl = "https://archive-vault.azurewebsites.net/api/ArchiveVault?code=z5c6qcR4aZEJHVmhOzN3YNC7ZKfH4V17qqRmvmV28LNxQA4ja4wBgw==";
 
         const requestHeaders: Headers = new Headers();
@@ -119,7 +120,7 @@ class InputPaneContent extends React.Component<IInputPaneContentProps, IInputPan
         requestHeaders.append('Cache-Control', 'no-cache');
 
         const body: string = JSON.stringify({
-            "spFilePath": "https://techmikael.sharepoint.com/teams/CollabSummit2019/Shared%20Documents/Document.docx",
+            "spFilePath": this.props.spFilePath,
             "confidentialityLevel": this.state.confidentiality,
             "retentionPeriod": this.state.retention
         });
