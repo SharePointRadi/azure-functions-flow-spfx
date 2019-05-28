@@ -25,12 +25,19 @@ namespace ArchiveVaultFunctions
 
         [FunctionName("ArchiveVault")]
         public static async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
+            HttpRequestMessage req,
+            TraceWriter log)
         {
             log.Info("ArchiveVault HTTP trigger function incoming request.");
 
+            // Get current claims
+            //foreach (Claim claim in ClaimsPrincipal.Current.Claims)
+            //{
+            //}
+
             try
-            {           
+            {
                 // Get request body
                 dynamic data = await req.Content.ReadAsAsync<object>();
                 var spFilePath = data?.spFilePath?.Value;
