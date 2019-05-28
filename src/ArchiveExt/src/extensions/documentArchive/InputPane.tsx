@@ -11,7 +11,6 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
 interface IInputPaneContentProps {
     httpClient: HttpClient;
-    closeCallback: () => void;
     hidden: boolean;
     itemId: number;
     spFilePath: string;
@@ -144,13 +143,13 @@ export default class InputPane {
     constructor(props) {
         this.httpClient = props.httpClient;
         this.itemId = props.itemId;
+        this.spFilePath = props.spFilePath;
         this.close = this.close.bind(this);
     }
 
     public render(): void {
         ReactDOM.render(<InputPaneContent
             httpClient={this.httpClient}
-            closeCallback={this.close}
             hidden={this.hidden}
             itemId={this.itemId}
             spFilePath={this.spFilePath}
