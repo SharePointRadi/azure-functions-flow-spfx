@@ -24,7 +24,7 @@ export default class ArchiveVaultWebPart extends React.Component<IArchiveVaultWe
       allElements.push(
         <tr key={index}>
           <td>
-            <a href={document.SpFilePath}>{document.FileName}</a>
+            <a href={document.SpFilePath}>{decodeURIComponent(document.FileName)}</a>
           </td>
           <td>{document.ConfidentialityLevel}</td>
           <td>{document.RetentionPeriod} years</td>
